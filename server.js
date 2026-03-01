@@ -18,6 +18,51 @@ const axios = require('axios');
 const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
+const winston = require('winston');
+
+// ============================================================
+// WINSTON LOGGER CONFIGURATION (For Troubleshooting & Support)
+// ============================================================
+
+const logger = winston.createLogger({
+  level: process.env.LOG_LEVEL || 'info',
+  format: winston.format.combine(
+    winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+    winston.format.errors({ stack: true }),
+    winston.format.json()
+  ),
+  defaultMeta: { service: 'ortiz-custom-works-api' },
+  transports: [
+    // Write all errors to error.log
+    new winston.transports.File({ 
+      filename: 'logs/error.log', 
+      level: 'error',
+      maxsize: 5242880, // 5MB
+      maxFiles: 5
+    }),
+    // Write all logs to combined.log
+    new winston.transports.File({ 
+      filename: 'logs/combined.log',
+      maxsize: 5242880, // 5MB
+      maxFiles: 5
+    })
+  ]
+});
+
+// Also log to console in development or when on Render
+if (process.env.NODE_ENV !== 'production' || process.env.RENDER) {
+  logger.add(new winston.transports.Console({
+    format: winston.format.combine(
+      winston.format.colorize(),
+      winston.format.simple()
+    )
+  }));
+}
+
+// Create logs directory if it doesn't exist
+if (!fs.existsSync('logs')) {
+  fs.mkdirSync('logs');
+}
 require('dotenv').config();
 
 const app = express();
@@ -298,7 +343,12 @@ app.post('/api/contact-form', async (req, res) => {
     });
 
     // Log for records
-    console.log(`✅ Contact form submitted: ${name} (${email})`);
+    logger.info('Contact form submitted', {
+      name,
+      email,
+      phone,
+      projectDetails: projectDetails ? 'provided' : 'none'
+    });
 
     res.json({
       success: true,
@@ -306,7 +356,12 @@ app.post('/api/contact-form', async (req, res) => {
     });
 
   } catch (error) {
-    console.error('❌ Contact form error:', error);
+    logger.error('Contact form submission failed', {
+      error: error.message,
+      stack: error.stack,
+      name: req.body.name,
+      email: req.body.email
+    });
     res.status(500).json({
       success: false,
       error: 'Failed to send message. Please try again or call us.'
@@ -797,8 +852,14 @@ app.post('/api/process-qb-payment', async (req, res) => {
     const transactionId = payment.Id;
     const intuitTid = response.headers['intuit_tid'] || 'N/A';
 
-    console.log(`✅ Payment processed: ${transactionId} - $${amount} for invoice ${invoiceNumber}`);
-    console.log(`   Intuit TID: ${intuitTid}`);
+    logger.info('Payment processed successfully', {
+      transactionId,
+      intuitTid,
+      amount,
+      invoiceNumber,
+      customerEmail,
+      paymentMethod
+    });
 
     // Send payment confirmation email
     if (customerEmail) {
@@ -857,9 +918,16 @@ app.post('/api/process-qb-payment', async (req, res) => {
     });
 
   } catch (error) {
-    console.error('❌ Payment processing error:', error.message);
     const intuitTid = error.response?.headers?.['intuit_tid'] || 'N/A';
-    console.error(`   Intuit TID: ${intuitTid}`);
+    logger.error('Payment processing failed', {
+      error: error.message,
+      stack: error.stack,
+      intuitTid,
+      invoiceNumber,
+      amount,
+      customerEmail,
+      qbFaultString: error.response?.data?.fault?.faultstring
+    });
     res.status(500).json({
       success: false,
       error: error.response?.data?.fault?.faultstring || 'Payment processing failed. Please try again or contact support.'
