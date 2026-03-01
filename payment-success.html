@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Successful | Ortiz Custom Works</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #c2410c;
+      --accent: #f59e0b;
+    }
+    .logo-glow { filter: drop-shadow(0 0 12px rgba(194, 65, 12, 0.4)); }
+  </style>
+</head>
+<body class="tail-container text-zinc-800 antialiased">
+
+  <!-- HEADER -->
+  <header class="bg-white shadow-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
+      <a href="index.html" class="flex items-center gap-4 hover:opacity-80 transition">
+        <img src="ortiz_logo.png" alt="Ortiz Custom Works" class="h-14 logo-glow">
+        <div>
+          <h1 class="text-3xl font-bold tracking-tight" style="color: black;">ORTIZ <span style="color: var(--primary);">C</span>USTOM WORKS</h1>
+          <p class="text-sm text-orange-600 -mt-1">Customized Spaces for Your Home</p>
+        </div>
+      </a>
+    </div>
+  </header>
+
+  <!-- SUCCESS CONTENT -->
+  <main class="py-20 md:py-32">
+    <div class="max-w-2xl mx-auto px-4 sm:px-6 text-center">
+      <!-- Success Icon -->
+      <div class="flex justify-center mb-8">
+        <div class="relative">
+          <div class="absolute inset-0 bg-green-100 rounded-full opacity-20 animate-pulse"></div>
+          <div class="relative bg-green-100 rounded-full p-6 inline-block">
+            <i class="fas fa-check text-green-600 text-5xl"></i>
+          </div>
+        </div>
+      </div>
+
+      <h1 class="text-4xl sm:text-5xl font-bold mb-4 text-zinc-900">Payment Successful!</h1>
+      <p class="text-xl text-zinc-600 mb-8">Thank you for your payment. Your deposit has been received and processed.</p>
+
+      <!-- Success Details -->
+      <div class="bg-green-50 border-l-4 border-green-600 p-6 mb-8 text-left rounded">
+        <h2 class="font-bold text-green-900 mb-4">What's Next?</h2>
+        <ul class="space-y-3 text-green-900">
+          <li class="flex items-start">
+            <i class="fas fa-check-circle text-green-600 mt-1 mr-3 flex-shrink-0"></i>
+            <span>A confirmation email has been sent to your registered email address</span>
+          </li>
+          <li class="flex items-start">
+            <i class="fas fa-check-circle text-green-600 mt-1 mr-3 flex-shrink-0"></i>
+            <span>We'll review your project details and contact you within 24 hours</span>
+          </li>
+          <li class="flex items-start">
+            <i class="fas fa-check-circle text-green-600 mt-1 mr-3 flex-shrink-0"></i>
+            <span>Schedule your free in-home consultation</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+        <a href="index.html" class="bg-[var(--primary)] text-white px-8 py-3 rounded-2xl font-semibold hover:bg-orange-700 transition inline-block">
+          Back to Home
+        </a>
+        <a href="contact.html" class="border-2 border-[var(--primary)] text-[var(--primary)] px-8 py-3 rounded-2xl font-semibold hover:bg-orange-50 transition inline-block">
+          Get in Touch
+        </a>
+      </div>
+
+      <!-- Support Info -->
+      <div class="bg-zinc-50 rounded-2xl p-6 text-sm text-zinc-600">
+        <p class="mb-3"><strong>Have questions?</strong></p>
+        <p class="mb-2">📞 Call us: <a href="tel:4076763102" class="text-[var(--primary)] font-semibold">(407) 676-3102</a></p>
+        <p>📧 Email: <a href="mailto:ortizcustomworks@gmail.com" class="text-[var(--primary)] font-semibold">ortizcustomworks@gmail.com</a></p>
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-zinc-900 text-white py-12 mt-16">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+      <img src="ortiz_logo.png" alt="Ortiz Custom Works Logo" class="h-12 mx-auto mb-4 opacity-80">
+      <p class="text-xl">Serving Central Florida</p>
+      <p class="mt-2">(407) 676-3102 • ortizcustomworks@gmail.com</p>
+      <p class="text-xs opacity-70 mt-8">© 2026 Ortiz Custom Works. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script src="api-config.js"></script>
+  <script>
+    // Check for Stripe session ID in URL and verify payment
+    const urlParams = new URLSearchParams(window.location.search);
+    const sessionId = urlParams.get('session_id');
+
+    if (sessionId) {
+      // Verify payment with backend
+      fetch(apiUrl(`/api/verify-payment/${sessionId}`))
+        .then(res => res.json())
+        .then(data => {
+          console.log('Payment verified:', data);
+        })
+        .catch(err => console.error('Verification error:', err));
+    }
+  </script>
+</body>
+</html>

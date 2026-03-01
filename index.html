@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ortiz Custom Works | Orlando Custom Closets & Home Renovations</title>
+  <meta name="description" content="Custom closets, kitchens, bathrooms, built-ins & full home renovations in Orlando. Expert design, premium finishes. Free in-home consultation. (407) 676-3102">
+  <meta name="keywords" content="custom closets Orlando, custom kitchens, home renovations, built-ins, bathroom remodeling, Central Florida">
+  <meta name="author" content="Ortiz Custom Works">
+  <link rel="canonical" href="https://ortizcustomworks.com/">
+  
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="Ortiz Custom Works | Orlando Custom Closets & Home Renovations">
+  <meta property="og:description" content="Custom closets, kitchens, bathrooms, built-ins & full home renovations in Orlando. Expert design, premium finishes. Free consultation.">
+  <meta property="og:type" content="business.business">
+  <meta property="og:url" content="https://ortizcustomworks.com/">
+  <meta property="og:image" content="https://ortizcustomworks.com/ortiz_logo.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+  
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Ortiz Custom Works | Custom Closets & Home Renovations Orlando">
+  <meta name="twitter:description" content="Custom closets, kitchens, bathrooms & home renovations in Orlando. Free in-home consultation available.">
+  <meta name="twitter:image" content="https://ortizcustomworks.com/ortiz_logo.png">
+  
+  <!-- JSON-LD Structured Data for Local Business -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Ortiz Custom Works",
+    "description": "Custom closets, kitchens, bathrooms, and full home renovations in Central Florida",
+    "url": "https://ortizcustomworks.com",
+    "telephone": "(407) 676-3102",
+    "email": "ortizcustomworks@gmail.com",
+    "address": {
+      "@type": "PostalAddress",
+      "addressRegion": "FL",
+      "addressCountry": "US",
+      "areaServed": ["Orlando, FL", "Central Florida"]
+    },
+    "image": "https://ortizcustomworks.com/ortiz_logo.png",
+    "priceRange": "$$$",
+    "areaServed": "Central Florida",
+    "serviceType": ["Custom Closets", "Kitchen Remodeling", "Bathroom Remodeling", "Built-in Cabinetry", "Home Renovation"],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "50"
+    }
+  }
+  </script>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #c2410c;   /* Exact orange from your logo interior */
+      --accent: #f59e0b;
+    }
+    .logo-glow { filter: drop-shadow(0 0 12px rgba(194, 65, 12, 0.4)); }
+  </style>
+</head>
+<body class="tail-container text-zinc-800 antialiased">
+
+  <!-- HEADER -->
+  <header class="bg-white shadow-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
+      <div class="flex items-center gap-4">
+        <img src="ortiz_logo.png" alt="Ortiz Custom Works" class="h-14 logo-glow">
+        <div>
+          <h1 class="text-3xl font-bold tracking-tight" style="color: black;">ORTIZ <span style="color: var(--primary);">C</span>USTOM WORKS</h1>
+          <p class="text-sm text-orange-600 -mt-1">Customized Spaces for Your Home</p>
+        </div>
+      </div>
+
+      <!-- Phone Number (Centered) -->
+      <a href="tel:4076763102" class="hidden md:flex items-center gap-2 font-semibold text-lg">
+        <i class="fa-solid fa-phone text-orange-600"></i> (407) 676-3102
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav class="hidden md:flex items-center gap-8 text-lg font-medium">
+        <a href="index.html" class="font-semibold text-[var(--primary)]">Home</a>
+        <a href="about.html" class="hover:text-orange-600 transition">About us</a>
+        <a href="contact.html" class="hover:text-orange-600 transition">Contact</a>
+        <a href="gallery.html" class="hover:text-orange-600 transition">Gallery</a>
+        <a href="reviews.html" class="hover:text-orange-600 transition">Reviews</a>
+        <a href="services.html" class="hover:text-orange-600 transition">Services</a>        <a href="pay-bill.html" class="bg-orange-100 text-[var(--primary)] px-4 py-2 rounded-lg font-semibold hover:bg-orange-200 transition">Pay Bill</a>      </nav>
+
+      <!-- Mobile menu button -->
+      <div class="md:hidden">
+        <button id="mobile-menu-button" class="p-2 text-zinc-800">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+               viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <!-- Mobile Nav -->
+    <nav id="mobile-menu" class="md:hidden bg-white shadow-lg hidden">
+      <div class="px-2 pt-2 pb-3 space-y-1">
+        <a href="index.html" class="block px-3 py-2 rounded-md text-base font-medium font-semibold text-[var(--primary)]">Home</a>
+        <a href="about.html" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-zinc-100">About us</a>
+        <a href="contact.html" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-zinc-100">Contact</a>
+        <a href="gallery.html" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-zinc-100">Gallery</a>
+        <a href="reviews.html" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-zinc-100">Reviews</a>
+        <a href="services.html" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-zinc-100">Services</a>        <a href="pay-bill.html" class="block px-3 py-2 rounded-md text-base font-medium bg-orange-100 text-[var(--primary)] hover:bg-orange-200 font-semibold">Pay Bill</a>      </div>
+    </nav>
+  </header>
+
+  <!-- ACTION BUTTONS BAR -->
+  <div class="bg-white border-b border-zinc-200 sticky top-24 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex flex-col sm:flex-row justify-end items-stretch sm:items-center gap-3 sm:gap-4">
+      <a href="#contact" class="bg-[var(--primary)] text-white px-6 sm:px-8 py-2 sm:py-3 rounded-2xl font-semibold hover:bg-orange-700 transition text-center text-sm sm:text-base">Free Consultation</a>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="relative min-h-screen md:h-screen flex items-center bg-cover bg-center" style="background-image: url('photo8-staircase.jpg')">
+    <div class="absolute inset-0 bg-black/50"></div>
+    <div class="relative max-w-5xl mx-auto text-center px-4 sm:px-6 py-16 md:py-0 text-white">
+      <h1 class="text-4xl sm:text-5xl md:text-7xl font-bold mb-4 sm:mb-6 leading-tight">Custom Home Renovation Experts</h1>
+      <p class="text-lg sm:text-xl md:text-2xl mb-6 sm:mb-10">Custom Closets • Kitchens • Bathrooms • Built-Ins • Staircases • Garage Organization</p>
+      <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
+        <a href="#contact" class="bg-white text-orange-700 px-6 sm:px-12 py-3 sm:py-5 rounded-3xl text-sm sm:text-base md:text-xl font-bold hover:bg-orange-100 transition">Get Your FREE Design Consultation</a>
+        <a href="#gallery" class="border-2 border-white px-6 sm:px-12 py-3 sm:py-5 rounded-3xl text-sm sm:text-base md:text-xl font-bold hover:bg-white/10 transition">View Our Work</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services" class="py-12 md:py-20 bg-zinc-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <h2 class="text-3xl sm:text-4xl font-bold text-center mb-8 sm:mb-12">Our Custom Spaces</h2>
+      <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-8">
+        <div class="bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition">
+          <img src="photo3.png" class="w-full h-48 sm:h-64 object-cover" alt="Custom walk-in closet with professional lighting and organization">
+          <div class="p-4 sm:p-8">
+            <h3 class="text-lg sm:text-2xl font-bold mb-2">Custom Closets</h3>
+            <p class="text-sm sm:text-base text-zinc-600">Walk-ins, reach-ins, and built-ins with premium lighting and finishes.</p>
+          </div>
+        </div>
+        <div class="bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition">
+          <img src="photo6.png" class="w-full h-48 sm:h-64 object-cover" alt="Modern kitchen and bathroom cabinets with premium finishes">
+          <div class="p-4 sm:p-8">
+            <h3 class="text-lg sm:text-2xl font-bold mb-2">Kitchen & Bath Cabinets</h3>
+            <p class="text-sm sm:text-base text-zinc-600">Full kitchen and bathroom remodels with beautiful custom cabinetry.</p>
+          </div>
+        </div>
+        <div class="bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition">
+          <img src="photo1.png" class="w-full h-48 sm:h-64 object-cover" alt="Custom home entertainment center and office built-ins">
+          <div class="p-4 sm:p-8">
+            <h3 class="text-lg sm:text-2xl font-bold mb-2">Entertainment & Office Built-Ins</h3>
+            <p class="text-sm sm:text-base text-zinc-600">Media centers and executive home offices tailored to you.</p>
+          </div>
+        </div>
+        <div class="bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition">
+          <img src="photo7.png" class="w-full h-48 sm:h-64 object-cover" alt="Professional garage organization and storage cabinets">
+          <div class="p-4 sm:p-8">
+            <h3 class="text-lg sm:text-2xl font-bold mb-2">Garage Organization</h3>
+            <p class="text-sm sm:text-base text-zinc-600">Heavy-duty cabinets, tool storage, and workbenches.</p>
+          </div>
+        </div>
+        <div class="bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition">
+          <img src="photo5.png" class="w-full h-48 sm:h-64 object-cover" alt="Custom bathroom and laundry room cabinetry">
+          <div class="p-4 sm:p-8">
+            <h3 class="text-lg sm:text-2xl font-bold mb-2">Bathroom & Laundry</h3>
+            <p class="text-sm sm:text-base text-zinc-600">Custom cabinetry and complete bathroom transformations.</p>
+          </div>
+        </div>
+        <div class="bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition">
+          <img src="photo9.png" class="w-full h-48 sm:h-64 object-cover" alt="Custom staircase remodel with modern railings">
+          <div class="p-4 sm:p-8">
+            <h3 class="text-lg sm:text-2xl font-bold mb-2">Staircase Remodels</h3>
+            <p class="text-sm sm:text-base text-zinc-600">Stunning custom staircases and railings that wow.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section id="process" class="py-20 bg-zinc-900 text-white">
+    <div class="max-w-5xl mx-auto px-6 text-center">
+      <h2 class="text-4xl font-bold mb-12">Our Simple 4-Step Process</h2>
+      <div class="grid md:grid-cols-4 gap-8">
+        <div class="text-center"><div class="text-6xl font-bold text-orange-500 mb-4">01</div><h4 class="font-bold text-xl">Free In-Home Consultation</h4></div>
+        <div class="text-center"><div class="text-6xl font-bold text-orange-500 mb-4">02</div><h4 class="font-bold text-xl">3D Custom Design</h4></div>
+        <div class="text-center"><div class="text-6xl font-bold text-orange-500 mb-4">03</div><h4 class="font-bold text-xl">Precision Fabrication</h4></div>
+        <div class="text-center"><div class="text-6xl font-bold text-orange-500 mb-4">04</div><h4 class="font-bold text-xl">Professional Installation</h4></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section id="testimonials" class="py-20 bg-zinc-50">
+    <div class="max-w-5xl mx-auto px-6">
+      <h2 class="text-4xl font-bold text-center mb-12">What Our Clients Say</h2>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="bg-white p-8 rounded-3xl shadow-xl">"They transformed our entire home office — looks like a million dollars!" — Sarah M.</div>
+        <div class="bg-white p-8 rounded-3xl shadow-xl">"Best closet I've ever had. Installation was flawless and fast." — Mike Rodriguez</div>
+        <div class="bg-white p-8 rounded-3xl shadow-xl">"The staircase remodel is the centerpiece of our house now. Incredible work." — Lisa Thompson</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="py-20">
+    <div class="max-w-3xl mx-auto px-6">
+      <h2 class="text-4xl font-bold text-center mb-12">Frequently Asked Questions</h2>
+      <div class="space-y-4">
+        <details class="bg-white p-6 rounded-3xl shadow cursor-pointer">
+          <summary class="font-semibold text-lg">How long does a custom closet take?</summary>
+          <p class="mt-4 text-zinc-600">From design to installation, most projects are completed in 2–4 weeks.</p>
+        </details>
+        <details class="bg-white p-6 rounded-3xl shadow cursor-pointer">
+          <summary class="font-semibold text-lg">Do you offer financing?</summary>
+          <p class="mt-4 text-zinc-600">Yes — we partner with several financing companies. Ask during your consultation.</p>
+        </details>
+        <details class="bg-white p-6 rounded-3xl shadow cursor-pointer">
+          <summary class="font-semibold text-lg">What areas do you serve?</summary>
+          <p class="mt-4 text-zinc-600">All of Central Florida including Orlando, Winter Park, Maitland, Lake Mary, and surrounding areas.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="py-20 bg-[var(--primary)] text-white">
+    <div class="max-w-2xl mx-auto px-6 text-center">
+      <h2 class="text-3xl sm:text-4xl font-bold mb-4 sm:mb-6">Ready to Transform Your Home?</h2>
+      <p class="text-zinc-600 mb-6 sm:mb-8 text-sm sm:text-base">Get a free estimate from our custom space experts</p>
+      <form id="consult-form" class="space-y-5 bg-white p-6 sm:p-8 rounded-3xl shadow-lg max-w-2xl mx-auto">
+        <div class="text-left">
+          <label class="block text-sm font-semibold text-zinc-700 mb-2">Full Name *</label>
+          <input type="text" placeholder="Enter your full name" class="w-full px-4 sm:px-6 py-3 sm:py-4 border-2 border-zinc-300 rounded-2xl focus:border-[var(--primary)] focus:outline-none transition bg-white text-zinc-800" required>
+        </div>
+        <div class="text-left">
+          <label class="block text-sm font-semibold text-zinc-700 mb-2">Phone Number *</label>
+          <input type="tel" placeholder="(407) 676-3102" class="w-full px-4 sm:px-6 py-3 sm:py-4 border-2 border-zinc-300 rounded-2xl focus:border-[var(--primary)] focus:outline-none transition bg-white text-zinc-800" required>
+        </div>
+        <div class="text-left">
+          <label class="block text-sm font-semibold text-zinc-700 mb-2">Email *</label>
+          <input type="email" placeholder="your.email@example.com" class="w-full px-4 sm:px-6 py-3 sm:py-4 border-2 border-zinc-300 rounded-2xl focus:border-[var(--primary)] focus:outline-none transition bg-white text-zinc-800" required>
+        </div>
+        <div class="text-left">
+          <label class="block text-sm font-semibold text-zinc-700 mb-2">Project Details</label>
+          <textarea placeholder="Describe your project, room size, style preferences, etc." rows="5" class="w-full px-4 sm:px-6 py-3 sm:py-4 border-2 border-zinc-300 rounded-2xl focus:border-[var(--primary)] focus:outline-none transition bg-white text-zinc-800"></textarea>
+        </div>
+        <button type="submit" class="w-full bg-[var(--primary)] text-white py-4 sm:py-6 text-base sm:text-lg font-bold rounded-3xl hover:bg-orange-700 transition">Send Message</button>
+      </form>
+      <p class="mt-8">(407) 676-3102 • ortizcustomworks@gmail.com</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-zinc-900 text-white py-12">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+      <img src="ortiz_logo.png" alt="Logo" class="h-12 mx-auto mb-4 opacity-80">
+      <p class="text-xl">Serving Central Florida</p>
+      <p class="mt-2">(407) 676-3102 • ortizcustomworks@gmail.com</p>
+      <p class="text-xs opacity-70 mt-8">© 2026 Ortiz Custom Works. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    tailwind.config = { content: ["*"] };
+    const form = document.getElementById('consult-form');
+    if (form) {
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+        alert('Thank you! We will call you within 24 hours to schedule your FREE consultation.');
+      });
+    }
+    const menuBtn = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    if (menuBtn && mobileMenu) {
+      menuBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+      });
+    }
+  </script>
+  <!-- Chatbot Widget -->
+  <script src="api-config.js"></script>
+  <script src="chatbot.js"></script>
+</body>
+</html>
