@@ -199,12 +199,56 @@ emailTransporter.verify((error, success) => {
 });
 
 // ============================================================
+// RECAPTCHA VERIFICATION HELPER
+// ============================================================
+
+async function verifyRecaptcha(token) {
+  if (!process.env.RECAPTCHA_SECRET_KEY) {
+    console.warn('⚠️  reCAPTCHA secret key not configured, skipping verification');
+    return true; // Allow in development
+  }
+
+  try {
+    const response = await axios.post('https://www.google.com/recaptcha/api/siteverify', null, {
+      params: {
+        secret: process.env.RECAPTCHA_SECRET_KEY,
+        response: token
+      }
+    });
+
+    const { success, score, action } = response.data;
+    
+    // For v3, score ranges from 0.0 (bot) to 1.0 (human)
+    // Threshold 0.5 is recommended
+    if (success && score >= 0.5) {
+      console.log(`✅ reCAPTCHA passed: score=${score}, action=${action}`);
+      return true;
+    } else {
+      console.warn(`⚠️  reCAPTCHA failed: score=${score}, success=${success}`);
+      return false;
+    }
+  } catch (error) {
+    console.error('❌ reCAPTCHA verification error:', error.message);
+    return false;
+  }
+}
+
+// ============================================================
 // ENDPOINT 1: CONTACT FORM - SEND CONSULTATION REQUEST
 // ============================================================
 
 app.post('/api/contact-form', async (req, res) => {
   try {
-    const { name, phone, email, projectDetails } = req.body;
+    const { name, phone, email, projectDetails, recaptchaToken } = req.body;
+
+    // Verify reCAPTCHA
+    const isHuman = await verifyRecaptcha(recaptchaToken);
+    if (!isHuman) {
+      return res.status(400).json({
+        success: false,
+        error: 'reCAPTCHA verification failed. Please try again.'
+      });
+    }
 
     // Validation
     if (!name || !phone || !email) {
@@ -684,8 +728,18 @@ app.post('/api/process-qb-payment', async (req, res) => {
       amount,
       paymentMethod,
       realmId,
-      accessToken
+      accessToken,
+      recaptchaToken
     } = req.body;
+
+    // Verify reCAPTCHA
+    const isHuman = await verifyRecaptcha(recaptchaToken);
+    if (!isHuman) {
+      return res.status(400).json({
+        success: false,
+        error: 'reCAPTCHA verification failed. Please refresh and try again.'
+      });
+    }
 
     if (!invoiceId || !customerId || !amount || !realmId) {
       return res.status(400).json({
