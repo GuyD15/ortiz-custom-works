@@ -398,10 +398,11 @@ app.post('/api/process-quickbooks-payment/lookup-bill', async (req, res) => {
     );
 
     const bills = response.data.QueryResponse?.Bill || [];
+    const intuitTid = response.headers['intuit_tid'] || 'N/A';
 
     if (bills.length > 0) {
       const bill = bills[0];
-      console.log(`✅ Bill found: ${billNumber}`);
+      console.log(`✅ Bill found: ${billNumber} (Intuit TID: ${intuitTid})`);
       
       res.json({
         found: true,
@@ -418,6 +419,8 @@ app.post('/api/process-quickbooks-payment/lookup-bill', async (req, res) => {
 
   } catch (error) {
     console.error('❌ Bill lookup error:', error.message);
+    const intuitTid = error.response?.headers?.['intuit_tid'] || 'N/A';
+    console.error(`   Intuit TID: ${intuitTid}`);
     res.status(500).json({
       found: false,
       error: error.message || 'Unable to look up bill'
@@ -483,8 +486,10 @@ app.post('/api/process-quickbooks-payment/process-payment', async (req, res) => 
 
     const payment = response.data.Payment;
     const transactionId = payment.Id;
+    const intuitTid = response.headers['intuit_tid'] || 'N/A';
 
     console.log(`✅ Payment processed: ${transactionId} - $${amount} for ${billNumber}`);
+    console.log(`   Intuit TID: ${intuitTid}`);
 
     // Send payment confirmation email
     if (customerEmail) {
@@ -647,7 +652,10 @@ app.post('/api/get-invoice-by-number', async (req, res) => {
     );
 
     const invoices = response.data.QueryResponse?.Invoice || [];
+    const intuitTid = response.headers['intuit_tid'] || 'N/A';
+    
     if (invoices.length === 0) {
+      console.log(`❌ Invoice not found: ${billNumber} (Intuit TID: ${intuitTid})`);
       return res.json({
         success: false,
         error: 'Invoice not found'
@@ -655,6 +663,7 @@ app.post('/api/get-invoice-by-number', async (req, res) => {
     }
 
     const invoice = invoices[0];
+    console.log(`✅ Invoice found: ${billNumber} (Intuit TID: ${intuitTid})`);
     const customerId = invoice.CustomerRef?.value;
 
     // Get customer details
@@ -706,6 +715,8 @@ app.post('/api/get-invoice-by-number', async (req, res) => {
 
   } catch (error) {
     console.error('❌ Invoice lookup error:', error.message);
+    const intuitTid = error.response?.headers?.['intuit_tid'] || 'N/A';
+    console.error(`   Intuit TID: ${intuitTid}`);
     res.status(500).json({
       success: false,
       error: error.response?.data?.fault?.faultstring || 'Failed to retrieve invoice'
@@ -784,8 +795,10 @@ app.post('/api/process-qb-payment', async (req, res) => {
 
     const payment = response.data.Payment;
     const transactionId = payment.Id;
+    const intuitTid = response.headers['intuit_tid'] || 'N/A';
 
     console.log(`✅ Payment processed: ${transactionId} - $${amount} for invoice ${invoiceNumber}`);
+    console.log(`   Intuit TID: ${intuitTid}`);
 
     // Send payment confirmation email
     if (customerEmail) {
@@ -845,6 +858,8 @@ app.post('/api/process-qb-payment', async (req, res) => {
 
   } catch (error) {
     console.error('❌ Payment processing error:', error.message);
+    const intuitTid = error.response?.headers?.['intuit_tid'] || 'N/A';
+    console.error(`   Intuit TID: ${intuitTid}`);
     res.status(500).json({
       success: false,
       error: error.response?.data?.fault?.faultstring || 'Payment processing failed. Please try again or contact support.'
