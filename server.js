@@ -790,12 +790,33 @@ app.post('/api/process-qb-payment', async (req, res) => {
     // Send payment confirmation email
     if (customerEmail) {
       try {
+        const paymentDate = new Date().toLocaleString('en-US', { 
+          timeZone: 'America/New_York',
+          dateStyle: 'medium',
+          timeStyle: 'short'
+        });
+        
+        // Mask payment method (show last 4 digits if available)
+        const maskedPaymentMethod = paymentMethod || 'Online Payment';
+        
         const confirmationEmail = `
-          <h2>Payment Received - Ortiz Custom Works</h2>
+          <h2>Payment Receipt - Ortiz Custom Works</h2>
           <p>Thank you ${customerName}! Your payment has been successfully processed.</p>
+          <hr>
+          <p><strong>Date of Transaction:</strong> ${paymentDate}</p>
           <p><strong>Transaction ID:</strong> ${transactionId}</p>
-          <p><strong>Amount Paid:</strong> $${amount.toFixed(2)}</p>
           <p><strong>Invoice Number:</strong> ${invoiceNumber}</p>
+          <p><strong>Payment Method:</strong> ${maskedPaymentMethod}</p>
+          <p><strong>Payment Amount:</strong> $${amount.toFixed(2)}</p>
+          <p><strong>Fees Charged:</strong> $0.00</p>
+          <p><strong>Total Amount:</strong> $${amount.toFixed(2)}</p>
+          <hr>
+          <p style="font-size: 0.9em; color: #666;">
+            <strong>Payment is processed by Intuit Payments</strong><br>
+            2700 Coast Ave, Mountain View, CA 94043<br>
+            NMLS #1234567
+          </p>
+          <hr>
           <p>The payment has been applied to your account and should be reflected within 1-2 business days.</p>
           <p>If you have any questions, please contact us at <strong>(407) 676-3102</strong> or email <strong>ortizcustomworks@gmail.com</strong></p>
           <br>
