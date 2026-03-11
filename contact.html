@@ -25,9 +25,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   
-  <!-- Google reCAPTCHA v3 -->
-  <script src="https://www.google.com/recaptcha/api.js?render=6Leob4YsAAAAAIQMO2g103_fjPwHuyGjkSwlytDV"></script>
-  
   <style>
     :root {
       --primary: #c2410c;   /* Exact orange from your logo interior */
@@ -136,6 +133,32 @@
   <script src="api-config.js"></script>
   <script>
     tailwind.config = { content: ["*"] };
+    const RECAPTCHA_SITE_KEY = '6Leob4YsAAAAAIQMO2g103_fjPwHuyGjkSwlytDV';
+
+    const loadRecaptchaScript = (siteKey) => {
+      return new Promise((resolve, reject) => {
+        if (typeof grecaptcha !== 'undefined' && grecaptcha.ready && grecaptcha.execute) {
+          resolve();
+          return;
+        }
+
+        const existingScript = document.querySelector('script[data-recaptcha="true"]');
+        if (existingScript) {
+          existingScript.addEventListener('load', () => resolve(), { once: true });
+          existingScript.addEventListener('error', () => reject(new Error('RECAPTCHA_LOAD_FAILED')), { once: true });
+          return;
+        }
+
+        const script = document.createElement('script');
+        script.src = 'https://www.google.com/recaptcha/api.js?render=' + encodeURIComponent(siteKey);
+        script.async = true;
+        script.defer = true;
+        script.dataset.recaptcha = 'true';
+        script.onload = () => resolve();
+        script.onerror = () => reject(new Error('RECAPTCHA_LOAD_FAILED'));
+        document.head.appendChild(script);
+      });
+    };
     
     // Contact form submission with email sending
     const formContact = document.getElementById('consult-form');
@@ -157,17 +180,21 @@
 
         const getRecaptchaToken = () => {
           return new Promise((resolve, reject) => {
-            if (typeof grecaptcha === 'undefined' || !grecaptcha.ready || !grecaptcha.execute) {
-              reject(new Error('RECAPTCHA_UNAVAILABLE'));
-              return;
-            }
+            loadRecaptchaScript(RECAPTCHA_SITE_KEY)
+              .then(() => {
+                if (typeof grecaptcha === 'undefined' || !grecaptcha.ready || !grecaptcha.execute) {
+                  reject(new Error('RECAPTCHA_UNAVAILABLE'));
+                  return;
+                }
 
-            grecaptcha.ready(() => {
-              grecaptcha
-                .execute('6Leob4YsAAAAAIQMO2g103_fjPwHuyGjkSwlytDV', { action: 'contact_form' })
-                .then(resolve)
-                .catch(() => reject(new Error('RECAPTCHA_EXECUTE_FAILED')));
-            });
+                grecaptcha.ready(() => {
+                  grecaptcha
+                    .execute(RECAPTCHA_SITE_KEY, { action: 'contact_form' })
+                    .then(resolve)
+                    .catch(() => reject(new Error('RECAPTCHA_EXECUTE_FAILED')));
+                });
+              })
+              .catch((error) => reject(error));
           });
         };
 
@@ -195,11 +222,17 @@
             })
           });
 
-          if (!response.ok) {
-            throw new Error('API_HTTP_' + response.status);
+          let result = null;
+          try {
+            result = await response.json();
+          } catch (parseError) {
+            result = null;
           }
 
-          const result = await response.json();
+          if (!response.ok) {
+            const apiError = result && result.error ? result.error : ('HTTP ' + response.status);
+            throw new Error('API_HTTP_' + response.status + ':' + apiError);
+          }
 
           if (result.success) {
             alert('Thank you! We will call you within 24 hours to schedule your FREE consultation.\n\nYou should also receive a confirmation email shortly.');
@@ -212,10 +245,13 @@
 
         } catch (error) {
           console.error('Form submission error:', error);
-          if (error.message === 'RECAPTCHA_UNAVAILABLE' || error.message === 'RECAPTCHA_EXECUTE_FAILED') {
+          if (error.message === 'RECAPTCHA_LOAD_FAILED' || error.message === 'RECAPTCHA_UNAVAILABLE' || error.message === 'RECAPTCHA_EXECUTE_FAILED') {
             alert('reCAPTCHA failed to load. Please disable ad/privacy blockers for this site and try again, or call us at (407) 803-2087.');
           } else if (error.message === 'API_CONFIG_MISSING') {
             alert('API configuration is missing on this page. Please refresh and try again, or call us at (407) 803-2087.');
+          } else if (error.message.startsWith('API_HTTP_400:')) {
+            const apiMessage = error.message.replace('API_HTTP_400:', '');
+            alert('Unable to send message: ' + apiMessage + '\n\nIf this mentions reCAPTCHA, please refresh the page and try again. You can also call us at (407) 803-2087.');
           } else {
             alert('Unable to send message right now. Please try again, or call us at (407) 803-2087.');
           }
