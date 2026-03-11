@@ -47,6 +47,18 @@ class WebsiteChatbot {
               <p>Hi! 👋 I'm here to help. Ask me about our services, how to contact us, or anything else!</p>
             </div>
           </div>
+
+          <div id="chatbot-quick-replies" class="chatbot-quick-replies">
+            <p class="quick-replies-title">Quick FAQ questions:</p>
+            <div class="quick-replies-list">
+              <button class="quick-reply-btn" data-question="How long does a custom closet take?">Custom closet timeline</button>
+              <button class="quick-reply-btn" data-question="How long for kitchen or pantry cabinetry?">Kitchen or pantry timeline</button>
+              <button class="quick-reply-btn" data-question="What areas do you serve?">Service areas</button>
+              <button class="quick-reply-btn" data-question="How much does custom cabinetry cost?">Cabinetry pricing</button>
+              <button class="quick-reply-btn" data-question="Can you work with my design ideas?">Design ideas</button>
+              <button class="quick-reply-btn" data-question="What types of cabinetries do you offer?">Cabinetry types</button>
+            </div>
+          </div>
           
           <!-- Contact Info Form (Hidden by default) -->
           <div id="chatbot-contact-form" class="chatbot-contact-form hidden">
@@ -301,6 +313,41 @@ class WebsiteChatbot {
         font-family: inherit;
       }
 
+      .chatbot-quick-replies {
+        padding: 10px 12px;
+        border-top: 1px solid #e5e7eb;
+        background: #ffffff;
+      }
+
+      .quick-replies-title {
+        margin: 0 0 8px 0;
+        font-size: 12px;
+        color: #6b7280;
+        font-weight: 600;
+      }
+
+      .quick-replies-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .quick-reply-btn {
+        border: 1px solid #fed7aa;
+        background: #fff7ed;
+        color: #c2410c;
+        border-radius: 999px;
+        padding: 6px 10px;
+        font-size: 12px;
+        line-height: 1;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .quick-reply-btn:hover {
+        background: #ffedd5;
+      }
+
       #chatbot-input:focus {
         border-color: #c2410c;
         box-shadow: 0 0 0 2px rgba(194, 65, 12, 0.1);
@@ -439,6 +486,7 @@ class WebsiteChatbot {
     const submitMsgBtn = document.getElementById('chatbot-submit-message');
     const cancelMsgBtn = document.getElementById('chatbot-cancel-message');
     const header = document.querySelector('.chatbot-header');
+    const quickReplyButtons = document.querySelectorAll('.quick-reply-btn');
 
     // Dragging from bubble or header
     bubble.addEventListener('mousedown', (e) => this.startDrag(e));
@@ -455,6 +503,14 @@ class WebsiteChatbot {
     cancelMsgBtn.addEventListener('click', () => this.cancelMessage());
     input.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') this.sendMessage();
+    });
+
+    quickReplyButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const inputEl = document.getElementById('chatbot-input');
+        inputEl.value = button.dataset.question || '';
+        this.sendMessage();
+      });
     });
   }
 
@@ -506,6 +562,7 @@ class WebsiteChatbot {
 
   showMessageForm() {
     document.getElementById('chatbot-input-area').classList.add('hidden');
+    document.getElementById('chatbot-quick-replies').classList.add('hidden');
     document.getElementById('chatbot-contact-form').classList.remove('hidden');
     document.getElementById('chatbot-visitor-name').focus();
   }
@@ -513,6 +570,7 @@ class WebsiteChatbot {
   cancelMessage() {
     document.getElementById('chatbot-contact-form').classList.add('hidden');
     document.getElementById('chatbot-input-area').classList.remove('hidden');
+    document.getElementById('chatbot-quick-replies').classList.remove('hidden');
     document.getElementById('chatbot-input').focus();
   }
 
@@ -550,11 +608,11 @@ class WebsiteChatbot {
         document.getElementById('chatbot-visitor-email').value = '';
         document.getElementById('chatbot-visitor-message').value = '';
       } else {
-        this.addMessage('⚠️ There was an error sending your message. Please try again or call us at (407) 676-3102.', 'bot');
+        this.addMessage('⚠️ There was an error sending your message. Please try again or call us at (407) 803-2087.', 'bot');
       }
     } catch (error) {
       console.error('Chatbot message error:', error);
-      this.addMessage('⚠️ There was an error sending your message. Please contact us directly at (407) 676-3102.', 'bot');
+      this.addMessage('⚠️ There was an error sending your message. Please contact us directly at (407) 803-2087.', 'bot');
     }
   }
 
@@ -628,10 +686,66 @@ class WebsiteChatbot {
       };
     }
 
+    // FAQ: How long does a custom closet take?
+    if (msg.includes('closet') && (msg.includes('how long') || msg.includes('timeline') || msg.includes('take') || msg.includes('weeks'))) {
+      return {
+        text: "Most projects are completed in 3–6 weeks, depending on size and complexity.",
+        links: [{ text: '→ Request Consultation', url: '/contact.html' }]
+      };
+    }
+
+    // FAQ: How long for kitchen or pantry cabinetry?
+    if ((msg.includes('kitchen') || msg.includes('pantry')) && (msg.includes('how long') || msg.includes('timeline') || msg.includes('take') || msg.includes('weeks'))) {
+      return {
+        text: "Typically, 4–8 weeks from design to installation, depending on complexity and materials.",
+        links: [{ text: '→ Request Consultation', url: '/contact.html' }]
+      };
+    }
+
+    // FAQ: Do you handle full home renovations?
+    if ((msg.includes('full home') || msg.includes('whole home') || msg.includes('entire home') || msg.includes('full renovation') || msg.includes('home renovation')) && (msg.includes('do you') || msg.includes('handle') || msg.includes('offer') || msg.includes('can you'))) {
+      return {
+        text: "We focus on custom cabinetry and staircase upgrades, enhancing existing spaces.",
+        links: [{ text: '→ View Our Services', url: '/services.html' }]
+      };
+    }
+
+    // FAQ: Can you work with my design ideas?
+    if ((msg.includes('design') || msg.includes('idea') || msg.includes('vision') || msg.includes('inspiration')) && (msg.includes('my') || msg.includes('our') || msg.includes('can you') || msg.includes('work with'))) {
+      return {
+        text: "Absolutely. We combine your vision with our technical design expertise to create a functional, elegant solution.",
+        links: [{ text: '→ Request Consultation', url: '/contact.html' }]
+      };
+    }
+
+    // FAQ: What areas do you serve?
+    if (msg.includes('area') || msg.includes('serve') || msg.includes('location') || msg.includes('where are you') || msg.includes('mount dora') || msg.includes('central florida')) {
+      return {
+        text: "We proudly serve Mount Dora, Central Florida, and surrounding areas, specializing in high-end cabinetry and staircase upgrades.",
+        links: [{ text: '→ Contact Us', url: '/contact.html' }]
+      };
+    }
+
+    // FAQ: What types of cabinetries do you offer?
+    if ((msg.includes('type') || msg.includes('what do you offer') || msg.includes('services') || msg.includes('cabinet')) && (msg.includes('cabinet') || msg.includes('cabinetries') || msg.includes('cabinetry') || msg.includes('offer'))) {
+      return {
+        text: "Custom closets, kitchen cabinetry, custom pantry cabinetry, built-ins, entertainment centers, garage/office systems, laundry cabinetry, and staircase upgrades, all crafted with precision.",
+        links: [{ text: '→ View All Services', url: '/services.html' }]
+      };
+    }
+
+    // FAQ: What makes Ortiz Custom Works different?
+    if (msg.includes('what makes') || msg.includes('different') || msg.includes('why choose') || msg.includes('why ortiz')) {
+      return {
+        text: "With over 30 years of experience and a strong foundation in drafting and technical design, we deliver functional, beautiful, and lasting spaces tailored to your home.",
+        links: [{ text: '→ About Us', url: '/about.html' }]
+      };
+    }
+
     // Pricing
     if (msg.includes('price') || msg.includes('cost') || msg.includes('how much') || msg.includes('afford') || msg.includes('budget') || msg.includes('cheap') || msg.includes('expensive')) {
       return {
-        text: "Great question! We pride ourselves on offering some of the lowest prices in town while maintaining premium quality. Every project is custom, so costs vary based on your needs. Schedule a free consultation to get an accurate quote tailored to your project.",
+        text: "Costs vary by project. We provide detailed estimates after an in-home consultation to align with your vision and budget.",
         links: [{ text: '→ Free Consultation', url: '/contact.html' }]
       };
     }
@@ -647,7 +761,7 @@ class WebsiteChatbot {
     // Kitchen & Bath Cabinets
     if (msg.includes('kitchen') || msg.includes('bathroom') || (msg.includes('bath') && !msg.includes('bathrobe'))) {
       return {
-        text: "We offer full kitchen and bathroom remodels with beautiful custom cabinetry. From cabinet design to complete renovations, our expert craftsmanship transforms your spaces.",
+        text: "We provide custom kitchen cabinetry and related cabinetry upgrades with seamless design and precise craftsmanship.",
         links: [{ text: '→ View Our Services', url: '/services.html#kitchen-bath' }]
       };
     }
@@ -687,7 +801,7 @@ class WebsiteChatbot {
     // Service inquiries (general)
     if (msg.includes('service') || msg.includes('what do you') || msg.includes('offer') || msg.includes('do you do')) {
       return {
-        text: "We offer custom spaces including: Custom Closets, Kitchen & Bath Cabinets, Entertainment & Office Built-Ins, Garage Organization, Bathroom & Laundry, and Staircase Remodels. What interests you?",
+        text: "We offer custom closets, kitchen cabinetry, custom pantry cabinetry, built-ins and entertainment centers, garage and office systems, laundry room cabinetry, and staircase upgrades. What interests you?",
         links: [{ text: '→ View All Services', url: '/services.html' }]
       };
     }
@@ -695,7 +809,7 @@ class WebsiteChatbot {
     // Contact information
     if (msg.includes('contact') || msg.includes('phone') || msg.includes('call') || msg.includes('reach')) {
       return {
-        text: "You can reach us at (407) 676-3102 or fill out our contact form. We'd love to hear from you!",
+        text: "You can reach us at (407) 803-2087 or fill out our contact form. We'd love to hear from you!",
         links: [{ text: '→ Contact Us', url: '/contact.html' }]
       };
     }
@@ -703,7 +817,7 @@ class WebsiteChatbot {
     // Hours - responsive based on current time
     if (msg.includes('hour') || msg.includes('open') || msg.includes('available')) {
       return {
-        text: "We're available weekdays during business hours. Feel free to call us at (407) 676-3102 or send a message anytime!",
+        text: "We're available weekdays during business hours. Feel free to call us at (407) 803-2087 or send a message anytime!",
         links: [{ text: '→ Send Message', url: '/contact.html' }]
       };
     }
@@ -727,7 +841,7 @@ class WebsiteChatbot {
     // About company
     if (msg.includes('about') || msg.includes('who are you') || msg.includes('company') || msg.includes('experience')) {
       return {
-        text: "Learn more about Ortiz Custom Works and our commitment to quality craftsmanship.",
+        text: "With over 30 years of experience and a strong foundation in drafting and technical design, Ortiz Custom Works delivers functional, beautiful, and lasting spaces tailored to your home.",
         links: [{ text: '→ About Us', url: '/about.html' }]
       };
     }
@@ -757,7 +871,7 @@ class WebsiteChatbot {
 
     if (msg.includes('help') || msg.includes('?')) {
       return {
-        text: "I can help you with information about our services (closets, kitchens, bathrooms, built-ins, garages, and staircases), contact details, how to pay a bill, view our portfolio, and more. What would you like to know?"
+        text: "I can help with custom closets, kitchen and pantry cabinetry, built-ins, entertainment centers, garage/office systems, laundry cabinetry, staircase upgrades, pricing, timelines, service areas, and contact details. What would you like to know?"
       };
     }
 

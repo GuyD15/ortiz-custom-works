@@ -156,7 +156,7 @@ Pedro/
 ├── reviews.html        (Coming soon)
 ├── robots.txt          (Search engine directives)
 ├── sitemap.xml         (Site structure map)
-└── ortiz_logo.png      (Logo asset)
+└── ortiz_logo.jpg      (Logo asset)
 ```
 
 ## 📝 Meta Information Summary
@@ -164,7 +164,7 @@ Pedro/
 - **Business**: Ortiz Custom Works
 - **Service Area**: Orlando & Central Florida
 - **Primary Services**: Custom Closets, Kitchens, Bathrooms, Built-Ins, Garages, Staircases
-- **Phone**: (407) 676-3102
+- **Phone**: (407) 803-2087
 - **Email**: ortizcustomworks@gmail.com
 - **Locations Served**: Orlando FL, Central Florida
 

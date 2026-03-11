@@ -14,26 +14,22 @@
   <meta property="og:description" content="Securely pay your Ortiz Custom Works bill online.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://ortizcustomworks.com/pay-bill.html">
-  <meta property="og:image" content="https://ortizcustomworks.com/ortiz_logo.png">
+  <meta property="og:image" content="https://ortizcustomworks.com/ortiz_logo.jpg">
   
   <!-- Twitter Card Meta Tags -->
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Pay Your Bill | Ortiz Custom Works">
   <meta name="twitter:description" content="Securely pay your bill online.">
-  <meta name="twitter:image" content="https://ortizcustomworks.com/ortiz_logo.png">
+  <meta name="twitter:image" content="https://ortizcustomworks.com/ortiz_logo.jpg">
   
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  
-  <!-- Google reCAPTCHA v3 -->
-  <script src="https://www.google.com/recaptcha/api.js?render=6LcmUHwsAAAAABBiZtmmNyWuO1OW7s2QX82_8Vp7"></script>
   
   <style>
     :root {
       --primary: #c2410c;
       --accent: #f59e0b;
     }
-    .logo-glow { filter: drop-shadow(0 0 12px rgba(194, 65, 12, 0.4)); }
   </style>
 </head>
 <body class="tail-container text-zinc-800 antialiased">
@@ -42,7 +38,7 @@
   <header class="bg-white shadow-md sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
       <div class="flex items-center gap-4">
-        <img src="ortiz_logo.png" alt="Ortiz Custom Works" class="h-14 logo-glow">
+        <img src="ortiz_logo.jpg" alt="Ortiz Custom Works" class="h-14">
         <div>
           <h1 class="text-3xl font-bold tracking-tight" style="color: black;">ORTIZ <span style="color: var(--primary);">C</span>USTOM WORKS</h1>
           <p class="text-sm text-orange-600 -mt-1">Customized Spaces for Your Home</p>
@@ -50,8 +46,8 @@
       </div>
 
       <!-- Phone Number (Centered) -->
-      <a href="tel:4076763102" class="hidden md:flex items-center gap-2 font-semibold text-lg">
-        <i class="fa-solid fa-phone text-orange-600"></i> (407) 676-3102
+      <a href="tel:4078032087" class="hidden md:flex items-center gap-2 font-semibold text-lg">
+        <i class="fa-solid fa-phone text-orange-600"></i> (407) 803-2087
       </a>
 
       <!-- Desktop Nav -->
@@ -93,455 +89,71 @@
     </div>
   </div>
 
-  <!-- BILL PAYMENT SECTION -->
-  <main class="py-12 md:py-20">
-    <div class="max-w-3xl mx-auto px-4 sm:px-6">
-      <div class="text-center mb-8 sm:mb-12">
-        <h1 class="text-3xl sm:text-4xl font-bold mb-4">Manage Your Account</h1>
-        <p class="text-zinc-600 text-sm sm:text-base">View your outstanding invoices and pay securely online through QuickBooks</p>
-      </div>
-
-      <!-- Step 1: Customer Lookup -->
-      <div id="customer-lookup-section" class="bg-white p-6 sm:p-8 rounded-3xl shadow-lg mb-6">
-        <h2 class="text-2xl font-bold text-zinc-800 mb-6">Find Your Account</h2>
-        
-        <div class="space-y-4">
-          <!-- Lookup by Email -->
-          <div>
-            <label class="block text-sm font-semibold text-zinc-700 mb-2">Email Address *</label>
-            <input type="email" id="lookup-email" placeholder="your.email@example.com" 
-                   class="w-full px-4 sm:px-6 py-3 sm:py-4 border-2 border-zinc-300 rounded-2xl focus:border-[var(--primary)] focus:outline-none transition bg-white text-zinc-800" 
-                   required>
-            <p class="text-xs text-zinc-500 mt-1">We'll search for invoices associated with this email</p>
-          </div>
-
-          <button type="button" id="lookup-btn" class="w-full bg-[var(--primary)] text-white py-3 sm:py-4 text-base sm:text-lg font-bold rounded-2xl hover:bg-orange-700 transition">
-            <i class="fas fa-search mr-2"></i>Find My Invoices
-          </button>
+  <!-- COMING SOON SECTION -->
+  <main class="py-12 md:py-20 min-h-screen flex items-center justify-center">
+    <div class="max-w-2xl mx-auto px-4 sm:px-6 text-center">
+      <div class="bg-gradient-to-br from-orange-50 to-orange-100 rounded-3xl p-8 sm:p-12 shadow-lg border-2 border-orange-200">
+        <div class="mb-6">
+          <i class="fas fa-tools text-6xl text-orange-600 mb-4"></i>
         </div>
-
-        <!-- Or search by bill number -->
-        <div class="relative my-6">
-          <div class="absolute inset-0 flex items-center">
-            <div class="w-full border-t border-zinc-300"></div>
-          </div>
-          <div class="relative flex justify-center text-sm">
-            <span class="px-2 bg-white text-zinc-500">OR</span>
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-sm font-semibold text-zinc-700 mb-2">Bill Number</label>
-          <input type="text" id="lookup-bill-number" placeholder="e.g., INV-001 or BILL-001" 
-                 class="w-full px-4 sm:px-6 py-3 sm:py-4 border-2 border-zinc-300 rounded-2xl focus:border-[var(--primary)] focus:outline-none transition bg-white text-zinc-800">
-          <p class="text-xs text-zinc-500 mt-1">Look for this on your invoice</p>
-        </div>
-
-        <button type="button" id="lookup-bill-btn" class="w-full mt-4 bg-zinc-200 text-zinc-800 py-3 sm:py-4 text-base sm:text-lg font-bold rounded-2xl hover:bg-zinc-300 transition">
-          <i class="fas fa-search mr-2"></i>Search by Bill Number
-        </button>
-
-        <p class="text-xs text-zinc-600 text-center mt-6">
-          Not finding your account? <a href="contact.html" class="text-[var(--primary)] font-semibold hover:underline">Contact us</a> for assistance
+        <h1 class="text-4xl sm:text-5xl font-bold mb-6 text-gray-900">
+          Online Payments Coming Soon!
+        </h1>
+        <p class="text-xl text-gray-700 mb-8">
+          We're working hard to bring you a secure online payment system. In the meantime, please contact us to arrange payment for your invoice.
         </p>
-      </div>
-
-      <!-- Step 2: Invoices Display (Hidden until lookup) -->
-      <div id="invoices-section" class="hidden">
-        <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-lg">
-          <div class="flex items-center justify-between mb-6">
-            <h2 class="text-2xl font-bold text-zinc-800">Your Invoices</h2>
-            <button id="back-to-lookup-btn" class="text-sm text-[var(--primary)] hover:underline font-semibold">
-              ← Back to Search
-            </button>
-          </div>
-
-          <!-- Customer Info Display -->
-          <div id="customer-info" class="mb-6 p-4 bg-zinc-50 rounded-xl border border-zinc-200">
-            <p class="text-sm"><strong>Customer:</strong> <span id="customer-name-display">-</span></p>
-            <p class="text-sm"><strong>Email:</strong> <span id="customer-email-display">-</span></p>
-          </div>
-
-          <!-- Invoices List -->
-          <div id="invoices-list" class="space-y-4 mb-6">
-            <!-- Invoice items will be dynamically added here -->
-          </div>
-
-          <!-- Selected Invoice Details -->
-          <div id="selected-invoice-section" class="hidden mt-8 pt-8 border-t border-zinc-200">
-            <h3 class="text-xl font-bold text-zinc-800 mb-4">Invoice Details</h3>
-            
-            <div id="invoice-details" class="bg-zinc-50 p-6 rounded-xl mb-6">
-              <!-- Invoice details will be populated here -->
+        
+        <div class="bg-white rounded-2xl p-6 mb-8 shadow-inner">
+          <h2 class="text-2xl font-bold mb-4 text-gray-900">Payment Options Available Now:</h2>
+          <div class="space-y-4 text-left">
+            <div class="flex items-start gap-3">
+              <i class="fas fa-phone text-orange-600 mt-1"></i>
+              <div>
+                <p class="font-semibold">Call to Pay</p>
+                <p class="text-gray-600">Call us at <a href="tel:4078032087" class="text-orange-600 hover:underline font-bold">(407) 803-2087</a></p>
+              </div>
             </div>
-
-            <!-- Payment Form -->
-            <form id="bill-payment-form" class="space-y-5 bg-white p-6 sm:p-8 rounded-3xl shadow-lg border-2 border-[var(--primary)]">
-              <h3 class="text-xl font-bold text-zinc-800">Payment Details</h3>
-              
-              <div class="text-left">
-                <label class="block text-sm font-semibold text-zinc-700 mb-2">Amount to Pay *</label>
-                <div class="relative">
-                  <span class="absolute left-4 sm:left-6 top-3 sm:top-4 text-zinc-600 font-semibold">$</span>
-                  <input type="number" id="payment-amount" placeholder="0.00" step="0.01" min="0"
-                         class="w-full pl-8 sm:pl-10 pr-4 sm:pr-6 py-3 sm:py-4 border-2 border-zinc-300 rounded-2xl focus:border-[var(--primary)] focus:outline-none transition bg-white text-zinc-800" 
-                         required>
-                </div>
-                <p class="text-xs text-zinc-500 mt-1">This must match the invoice amount</p>
+            <div class="flex items-start gap-3">
+              <i class="fas fa-envelope text-orange-600 mt-1"></i>
+              <div>
+                <p class="font-semibold">Email Us</p>
+                <p class="text-gray-600">Send payment details to <a href="mailto:ortizcustomworks@gmail.com" class="text-orange-600 hover:underline">ortizcustomworks@gmail.com</a></p>
               </div>
-
-              <div class="text-left">
-                <label class="block text-sm font-semibold text-zinc-700 mb-2">Payment Method</label>
-                <select id="payment-method" class="w-full px-4 sm:px-6 py-3 sm:py-4 border-2 border-zinc-300 rounded-2xl focus:border-[var(--primary)] focus:outline-none transition bg-white text-zinc-800">
-                  <option value="bank-transfer">Bank Transfer (ACH)</option>
-                  <option value="credit-card">Credit Card</option>
-                  <option value="ach">ACH Direct Debit</option>
-                </select>
-                <p class="text-xs text-zinc-500 mt-1">QuickBooks will process your payment securely</p>
+            </div>
+            <div class="flex items-start gap-3">
+              <i class="fas fa-money-check text-orange-600 mt-1"></i>
+              <div>
+                <p class="font-semibold">Check or Cash</p>
+                <p class="text-gray-600">Pay in person or mail a check</p>
               </div>
-
-              <div class="text-left">
-                <label class="flex items-center">
-                  <input type="checkbox" id="agree-terms" class="w-4 h-4 rounded border-2 border-zinc-300 text-[var(--primary)]" required>
-                  <span class="ml-2 text-sm text-zinc-700">I agree to submit this payment to QuickBooks</span>
-                </label>
-              </div>
-
-              <button type="submit" class="w-full bg-[var(--primary)] text-white py-4 sm:py-5 text-base sm:text-lg font-bold rounded-3xl hover:bg-orange-700 transition">
-                <i class="fas fa-lock mr-2"></i>Submit Payment
-              </button>
-
-              <p class="text-xs text-zinc-500 text-center">Your payment information is secure and encrypted</p>
-            </form>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Help Section -->
-      <div class="mt-8 p-6 bg-zinc-50 rounded-2xl border border-zinc-200">
-        <h3 class="font-bold text-zinc-800 mb-3">Need Help?</h3>
-        <p class="text-sm text-zinc-600 mb-4">If you have trouble accessing your invoices or have questions about your account:</p>
-        <div class="flex flex-col sm:flex-row gap-4">
-          <a href="contact.html" class="inline-block bg-[var(--primary)] text-white px-6 py-2 rounded-xl font-semibold hover:bg-orange-700 transition text-sm text-center">
-            Contact Us
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="contact.html" class="bg-orange-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-orange-700 transition">
+            <i class="fas fa-comments mr-2"></i>Contact Us
           </a>
-          <a href="tel:4076763102" class="inline-block border-2 border-[var(--primary)] text-[var(--primary)] px-6 py-2 rounded-xl font-semibold hover:bg-orange-50 transition text-sm text-center">
-            Call: (407) 676-3102
+          <a href="index.html" class="bg-white text-orange-600 px-8 py-3 rounded-xl font-semibold hover:bg-gray-50 transition border-2 border-orange-600">
+            <i class="fas fa-home mr-2"></i>Back to Home
           </a>
         </div>
       </div>
     </div>
   </main>
+
   <!-- FOOTER -->
   <footer class="bg-zinc-900 text-white py-12 mt-16">
     <div class="max-w-7xl mx-auto px-6 text-center">
-      <img src="ortiz_logo.png" alt="Ortiz Custom Works Logo" class="h-12 mx-auto mb-4 opacity-80">
+      <img src="ortiz_logo.jpg" alt="Ortiz Custom Works Logo" class="h-12 mx-auto mb-4 opacity-80">
       <p class="text-xl">Serving Central Florida</p>
-      <p class="mt-2">(407) 676-3102 • ortizcustomworks@gmail.com</p>
+      <p class="mt-2">(407) 803-2087 • ortizcustomworks@gmail.com</p>
       <p class="text-xs opacity-70 mt-8">© 2026 Ortiz Custom Works. All Rights Reserved.</p>
     </div>
   </footer>
 
-  <script src="api-config.js"></script>
-
-  <!-- QUICKBOOKS INTEGRATION SCRIPT -->
+  <!-- Mobile menu toggle -->
   <script>
-    // ============================================================
-    // QUICKBOOKS BILL PAYMENT & INVOICE MANAGEMENT
-    // ============================================================
-
-    // QuickBooks API Configuration (UPDATE WITH YOUR CREDENTIALS)
-    const QB_CONFIG = {
-      realmId: 'YOUR_REALM_ID_HERE',        // From QuickBooks OAuth
-      accessToken: 'YOUR_ACCESS_TOKEN_HERE', // From QuickBooks OAuth
-      environmentUrl: 'https://quickbooks.api.intuit.com',
-      apiVersion: 'v2',
-      paymentUrl: `${window.API_BASE}/api` // Your backend endpoint
-    };
-
-    // State management
-    let currentCustomer = null;
-    let currentInvoices = [];
-    let selectedInvoice = null;
-
-    // ============================================================
-    // LOOKUP FUNCTIONS
-    // ============================================================
-
-    // Lookup invoices by email
-    const lookupBtn = document.getElementById('lookup-btn');
-    if (lookupBtn) {
-      lookupBtn.addEventListener('click', async () => {
-        const email = document.getElementById('lookup-email').value.trim();
-        
-        if (!email) {
-          alert('Please enter your email address');
-          return;
-        }
-
-        lookupBtn.disabled = true;
-        lookupBtn.textContent = 'Searching...';
-
-        try {
-          const response = await fetch(`${QB_CONFIG.paymentUrl}/get-customer-invoices`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: email, realmId: QB_CONFIG.realmId })
-          });
-
-          const data = await response.json();
-
-          if (data.success && data.invoices && data.invoices.length > 0) {
-            currentCustomer = data.customer;
-            currentInvoices = data.invoices;
-            displayInvoices();
-            toggleSections();
-          } else {
-            alert('No invoices found for this email. Please check and try again, or contact us.');
-          }
-        } catch (error) {
-          console.error('Lookup error:', error);
-          alert('Error searching for invoices. Please try again.');
-        } finally {
-          lookupBtn.disabled = false;
-          lookupBtn.textContent = 'Find My Invoices';
-        }
-      });
-    }
-
-    // Lookup by bill number
-    const lookupBillBtn = document.getElementById('lookup-bill-btn');
-    if (lookupBillBtn) {
-      lookupBillBtn.addEventListener('click', async () => {
-        const billNumber = document.getElementById('lookup-bill-number').value.trim();
-        
-        if (!billNumber) {
-          alert('Please enter a bill number');
-          return;
-        }
-
-        lookupBillBtn.disabled = true;
-        lookupBillBtn.textContent = 'Searching...';
-
-        try {
-          const response = await fetch(`${QB_CONFIG.paymentUrl}/get-invoice-by-number`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ billNumber: billNumber, realmId: QB_CONFIG.realmId })
-          });
-
-          const data = await response.json();
-
-          if (data.success && data.invoice) {
-            currentCustomer = data.customer;
-            currentInvoices = [data.invoice];
-            displayInvoices();
-            toggleSections();
-          } else {
-            alert('Invoice not found. Please check the bill number and try again.');
-          }
-        } catch (error) {
-          console.error('Lookup error:', error);
-          alert('Error searching for invoice. Please try again.');
-        } finally {
-          lookupBillBtn.disabled = false;
-          lookupBillBtn.textContent = 'Search by Bill Number';
-        }
-      });
-    }
-
-    // ============================================================
-    // DISPLAY FUNCTIONS
-    // ============================================================
-
-    function displayInvoices() {
-      const listContainer = document.getElementById('invoices-list');
-      listContainer.innerHTML = '';
-
-      // Display customer info
-      if (currentCustomer) {
-        document.getElementById('customer-name-display').textContent = currentCustomer.name || '-';
-        document.getElementById('customer-email-display').textContent = currentCustomer.email || '-';
-      }
-
-      // Display each invoice as a clickable card
-      currentInvoices.forEach((invoice, index) => {
-        const dueDate = new Date(invoice.dueDate);
-        const isOverdue = dueDate < new Date();
-        
-        const invoiceCard = document.createElement('div');
-        invoiceCard.className = `p-4 border-2 rounded-xl cursor-pointer transition ${
-          isOverdue ? 'border-red-300 bg-red-50 hover:bg-red-100' : 'border-zinc-300 bg-white hover:bg-zinc-50'
-        }`;
-        
-        invoiceCard.innerHTML = `
-          <div class="flex justify-between items-start">
-            <div>
-              <p class="font-semibold text-zinc-800">${invoice.docNumber}</p>
-              <p class="text-sm text-zinc-600">Amount: $${invoice.totalAmount?.toFixed(2) || '0.00'}</p>
-              <p class="text-sm text-zinc-600">Due: ${dueDate.toLocaleDateString()}</p>
-              ${isOverdue ? `<p class="text-xs text-red-600 font-semibold mt-1">⚠️ Overdue</p>` : ''}
-            </div>
-            <div>
-              <span class="inline-block px-3 py-1 text-xs font-semibold rounded-full ${
-                invoice.status === 'Open' ? 'bg-orange-100 text-orange-700' : 'bg-green-100 text-green-700'
-              }">
-                ${invoice.status}
-              </span>
-            </div>
-          </div>
-        `;
-
-        invoiceCard.addEventListener('click', () => selectInvoice(index));
-        listContainer.appendChild(invoiceCard);
-      });
-    }
-
-    function selectInvoice(index) {
-      selectedInvoice = currentInvoices[index];
-
-      // Display invoice details
-      const details = document.getElementById('invoice-details');
-      details.innerHTML = `
-        <div class="space-y-3">
-          <div class="flex justify-between items-center">
-            <span class="text-zinc-600">Invoice #:</span>
-            <span class="font-semibold">${selectedInvoice.docNumber}</span>
-          </div>
-          <div class="flex justify-between items-center">
-            <span class="text-zinc-600">Date:</span>
-            <span class="font-semibold">${new Date(selectedInvoice.txnDate).toLocaleDateString()}</span>
-          </div>
-          <div class="flex justify-between items-center">
-            <span class="text-zinc-600">Due Date:</span>
-            <span class="font-semibold text-[var(--primary)]">${new Date(selectedInvoice.dueDate).toLocaleDateString()}</span>
-          </div>
-          <div class="border-t pt-3 flex justify-between items-center">
-            <span class="text-zinc-600 font-semibold">Total Amount:</span>
-            <span class="text-2xl font-bold text-[var(--primary)]">$${selectedInvoice.totalAmount?.toFixed(2) || '0.00'}</span>
-          </div>
-          <div class="flex justify-between items-center">
-            <span class="text-zinc-600">Status:</span>
-            <span class="font-semibold px-3 py-1 rounded-full bg-orange-100 text-orange-700">${selectedInvoice.status}</span>
-          </div>
-        </div>
-      `;
-
-      // Set amount field
-      document.getElementById('payment-amount').value = selectedInvoice.totalAmount?.toFixed(2) || '';
-      document.getElementById('payment-amount').min = 0.01;
-      document.getElementById('payment-amount').max = selectedInvoice.totalAmount || 999999;
-
-      // Show payment section
-      document.getElementById('selected-invoice-section').classList.remove('hidden');
-
-      // Scroll to payment form
-      setTimeout(() => {
-        document.getElementById('bill-payment-form').scrollIntoView({ behavior: 'smooth' });
-      }, 100);
-    }
-
-    function toggleSections() {
-      document.getElementById('customer-lookup-section').classList.add('hidden');
-      document.getElementById('invoices-section').classList.remove('hidden');
-      document.getElementById('invoices-section').scrollIntoView({ behavior: 'smooth' });
-    }
-
-    // Back to lookup button
-    const backBtn = document.getElementById('back-to-lookup-btn');
-    if (backBtn) {
-      backBtn.addEventListener('click', () => {
-        document.getElementById('customer-lookup-section').classList.remove('hidden');
-        document.getElementById('invoices-section').classList.add('hidden');
-        document.getElementById('selected-invoice-section').classList.add('hidden');
-        document.getElementById('lookup-email').value = '';
-        document.getElementById('lookup-bill-number').value = '';
-        currentCustomer = null;
-        currentInvoices = [];
-        selectedInvoice = null;
-      });
-    }
-
-    // ============================================================
-    // PAYMENT SUBMISSION
-    // ============================================================
-
-    const paymentForm = document.getElementById('bill-payment-form');
-    if (paymentForm) {
-      paymentForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        if (!selectedInvoice) {
-          alert('Please select an invoice first');
-          return;
-        }
-
-        const amount = parseFloat(document.getElementById('payment-amount').value);
-        const paymentMethod = document.getElementById('payment-method').value;
-
-        if (amount <= 0) {
-          alert('Please enter a valid payment amount');
-          return;
-        }
-
-        if (Math.abs(amount - selectedInvoice.totalAmount) > 0.01) {
-          const confirmed = confirm(
-            `Invoice amount is $${selectedInvoice.totalAmount.toFixed(2)}, ` +
-            `but you entered $${amount.toFixed(2)}. Continue anyway?`
-          );
-          if (!confirmed) return;
-        }
-
-        const submitBtn = paymentForm.querySelector('button[type="submit"]');
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Processing Payment...';
-
-        try {
-          // Generate reCAPTCHA token
-          const recaptchaToken = await grecaptcha.execute('6LcmUHwsAAAAABBiZtmmNyWuO1OW7s2QX82_8Vp7', { action: 'payment_form' });
-          
-          // Submit payment to QuickBooks
-          const response = await fetch(`${QB_CONFIG.paymentUrl}/process-qb-payment`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              recaptchaToken: recaptchaToken,
-              invoiceId: selectedInvoice.id,
-              invoiceNumber: selectedInvoice.docNumber,
-              customerId: currentCustomer.id,
-              customerName: currentCustomer.name,
-              customerEmail: currentCustomer.email,
-              amount: amount,
-              paymentMethod: paymentMethod,
-              realmId: QB_CONFIG.realmId,
-              accessToken: QB_CONFIG.accessToken
-            })
-          });
-
-          const result = await response.json();
-
-          if (result.success) {
-            alert(`✅ Payment successful!\n\nTransaction ID: ${result.transactionId}\nAmount: $${amount.toFixed(2)}\n\nA confirmation email will be sent shortly.`);
-            paymentForm.reset();
-            document.getElementById('customer-lookup-section').classList.remove('hidden');
-            document.getElementById('invoices-section').classList.add('hidden');
-            currentCustomer = null;
-            currentInvoices = [];
-            selectedInvoice = null;
-          } else {
-            alert(`❌ Payment failed: ${result.error || 'Unknown error'}`);
-          }
-        } catch (error) {
-          console.error('Payment error:', error);
-          alert('Error processing payment. Please try again or contact us.');
-        } finally {
-          submitBtn.disabled = false;
-          submitBtn.textContent = 'Submit Payment';
-        }
-      });
-    }
-
-    // Mobile menu toggle
     const mobileMenuButton = document.getElementById('mobile-menu-button');
     const mobileMenu = document.getElementById('mobile-menu');
     if (mobileMenuButton && mobileMenu) {

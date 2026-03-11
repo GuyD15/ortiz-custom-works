@@ -20,6 +20,11 @@ const fs = require('fs');
 const path = require('path');
 const winston = require('winston');
 
+const logsDir = path.join(__dirname, 'logs');
+if (!fs.existsSync(logsDir)) {
+  fs.mkdirSync(logsDir, { recursive: true });
+}
+
 // ============================================================
 // WINSTON LOGGER CONFIGURATION (For Troubleshooting & Support)
 // ============================================================
@@ -35,14 +40,14 @@ const logger = winston.createLogger({
   transports: [
     // Write all errors to error.log
     new winston.transports.File({ 
-      filename: 'logs/error.log', 
+      filename: path.join(logsDir, 'error.log'), 
       level: 'error',
       maxsize: 5242880, // 5MB
       maxFiles: 5
     }),
     // Write all logs to combined.log
     new winston.transports.File({ 
-      filename: 'logs/combined.log',
+      filename: path.join(logsDir, 'combined.log'),
       maxsize: 5242880, // 5MB
       maxFiles: 5
     })
@@ -59,10 +64,6 @@ if (process.env.NODE_ENV !== 'production' || process.env.RENDER) {
   }));
 }
 
-// Create logs directory if it doesn't exist
-if (!fs.existsSync('logs')) {
-  fs.mkdirSync('logs');
-}
 require('dotenv').config();
 
 const app = express();
@@ -320,7 +321,7 @@ app.post('/api/contact-form', async (req, res) => {
       <h2>Thank You for Your Interest - Ortiz Custom Works</h2>
       <p>Hi ${name},</p>
       <p>We received your consultation request and will contact you within 24 hours at <strong>${phone}</strong> to schedule your free in-home consultation.</p>
-      <p>If you have any questions in the meantime, feel free to call us at <strong>(407) 676-3102</strong> or reply to this email.</p>
+      <p>If you have any questions in the meantime, feel free to call us at <strong>(407) 803-2087</strong> or reply to this email.</p>
       <p>Looking forward to helping you create your custom space!</p>
       <br>
       <p>Best regards,<br>Ortiz Custom Works Team</p>
@@ -556,7 +557,7 @@ app.post('/api/process-quickbooks-payment/process-payment', async (req, res) => 
           <p><strong>Amount Paid:</strong> $${amount.toFixed(2)}</p>
           <p><strong>Bill Number:</strong> ${billNumber}</p>
           <p>The payment has been applied to your account and should be reflected within 1-2 business days.</p>
-          <p>If you have any questions, please contact us at <strong>(407) 676-3102</strong> or email <strong>ortizcustomworks@gmail.com</strong></p>
+          <p>If you have any questions, please contact us at <strong>(407) 803-2087</strong> or email <strong>ortizcustomworks@gmail.com</strong></p>
           <br>
           <p>Best regards,<br>Ortiz Custom Works Team</p>
         `;
@@ -892,7 +893,7 @@ app.post('/api/process-qb-payment', async (req, res) => {
           </p>
           <hr>
           <p>The payment has been applied to your account and should be reflected within 1-2 business days.</p>
-          <p>If you have any questions, please contact us at <strong>(407) 676-3102</strong> or email <strong>ortizcustomworks@gmail.com</strong></p>
+          <p>If you have any questions, please contact us at <strong>(407) 803-2087</strong> or email <strong>ortizcustomworks@gmail.com</strong></p>
           <br>
           <p>Best regards,<br>Ortiz Custom Works Team</p>
         `;
@@ -984,7 +985,7 @@ app.post('/api/send-invoice', async (req, res) => {
       <p><strong>Amount Due:</strong> <span style="font-size: 1.5em; color: #c2410c;">$${invoice.TotalAmt?.toFixed(2) || '0.00'}</span></p>
       <hr>
       <p>You can pay this invoice online at: <a href="${process.env.FRONTEND_URL || 'https://ortizcustomworks.com'}/pay-bill.html">Pay Bill</a></p>
-      <p>If you have any questions, please contact us at <strong>(407) 676-3102</strong> or email <strong>ortizcustomworks@gmail.com</strong></p>
+      <p>If you have any questions, please contact us at <strong>(407) 803-2087</strong> or email <strong>ortizcustomworks@gmail.com</strong></p>
       <br>
       <p>Best regards,<br>Ortiz Custom Works Team</p>
     `;
@@ -1052,9 +1053,6 @@ app.get('/api/health', (req, res) => {
 // ============================================================
 // ANALYTICS & SELF-IMPROVEMENT SYSTEM
 // ============================================================
-
-const fs = require('fs');
-const path = require('path');
 
 const analyticsFile = path.join(__dirname, 'analytics.json');
 const faqFile = path.join(__dirname, 'faqs.json');
@@ -1322,7 +1320,7 @@ ${publishedFaqs.map(faq => `
 
   <footer class="bg-gray-900 text-white mt-16 py-8">
     <div class="max-w-7xl mx-auto px-4 text-center">
-      <p>© 2026 Ortiz Custom Works | (407) 676-3102</p>
+      <p>© 2026 Ortiz Custom Works | (407) 803-2087</p>
     </div>
   </footer>
 </body>
@@ -1457,7 +1455,7 @@ function updatePagesSEO(topServices, keywordMetrics) {
       "@type": "LocalBusiness",
       "name": "Ortiz Custom Works",
       "description": metaDescription,
-      "telephone": "(407) 676-3102",
+      "telephone": "(407) 803-2087",
       "image": "https://ortizcustomworks.com/logo.png",
       "address": {
         "@type": "PostalAddress",
@@ -1484,7 +1482,7 @@ function updatePagesSEO(topServices, keywordMetrics) {
       "@type": "ProfessionalService",
       "name": "Ortiz Custom Works",
       "description": servicesMeta,
-      "telephone": "(407) 676-3102",
+      "telephone": "(407) 803-2087",
       "areaServed": {
         "@type": "City",
         "name": "Orlando",
