@@ -281,7 +281,11 @@ async function sendMailStrict(mailOptions, contextLabel) {
 async function verifyRecaptcha(token) {
   if (!process.env.RECAPTCHA_SECRET_KEY) {
     console.warn('⚠️  reCAPTCHA secret key not configured, skipping verification');
-    return true; // Allow in development
+    return { ok: true, reason: 'secret-missing-bypass' }; // Allow in development
+  }
+
+  if (!token) {
+    return { ok: false, reason: 'missing-token' };
   }
 
   try {
@@ -293,19 +297,34 @@ async function verifyRecaptcha(token) {
     });
 
     const { success, score, action } = response.data;
-    
-    // For v3, score ranges from 0.0 (bot) to 1.0 (human)
-    // Threshold 0.5 is recommended
-    if (success && score >= 0.5) {
-      console.log(`✅ reCAPTCHA passed: score=${score}, action=${action}`);
-      return true;
-    } else {
-      console.warn(`⚠️  reCAPTCHA failed: score=${score}, success=${success}`);
-      return false;
+    const errorCodes = response.data['error-codes'] || [];
+
+    if (!success) {
+      console.warn(`⚠️  reCAPTCHA failed: success=${success}, errors=${errorCodes.join(',') || 'none'}`);
+      return { ok: false, reason: 'google-failed', errorCodes };
     }
+
+    const expectedAction = 'contact_form';
+    if (action && action !== expectedAction) {
+      console.warn(`⚠️  reCAPTCHA action mismatch: expected=${expectedAction}, actual=${action}`);
+      return { ok: false, reason: 'action-mismatch', action };
+    }
+
+    const minScore = Number(process.env.RECAPTCHA_MIN_SCORE || 0.3);
+    if (typeof score === 'number' && score < minScore) {
+      console.warn(`⚠️  reCAPTCHA low score: score=${score}, min=${minScore}`);
+      return { ok: false, reason: 'low-score', score, minScore };
+    }
+
+    if (success) {
+      console.log(`✅ reCAPTCHA passed: score=${score}, action=${action}`);
+      return { ok: true, score, action };
+    }
+
+    return { ok: false, reason: 'unknown-failure' };
   } catch (error) {
     console.error('❌ reCAPTCHA verification error:', error.message);
-    return false;
+    return { ok: false, reason: 'verification-request-error', message: error.message };
   }
 }
 
@@ -318,11 +337,24 @@ app.post('/api/contact-form', async (req, res) => {
     const { name, phone, email, projectDetails, recaptchaToken } = req.body;
 
     // Verify reCAPTCHA
-    const isHuman = await verifyRecaptcha(recaptchaToken);
-    if (!isHuman) {
+    const recaptchaCheck = await verifyRecaptcha(recaptchaToken);
+    if (!recaptchaCheck.ok) {
+      let recaptchaMessage = 'reCAPTCHA verification failed. Please try again.';
+
+      if (recaptchaCheck.reason === 'google-failed') {
+        const codes = (recaptchaCheck.errorCodes || []).join(', ');
+        recaptchaMessage = `reCAPTCHA rejected the token${codes ? ` (${codes})` : ''}.`;
+      } else if (recaptchaCheck.reason === 'action-mismatch') {
+        recaptchaMessage = 'reCAPTCHA action mismatch. Please refresh and try again.';
+      } else if (recaptchaCheck.reason === 'low-score') {
+        recaptchaMessage = `reCAPTCHA score too low (${recaptchaCheck.score}). Please retry.`;
+      } else if (recaptchaCheck.reason === 'missing-token') {
+        recaptchaMessage = 'Missing reCAPTCHA token. Please refresh and try again.';
+      }
+
       return res.status(400).json({
         success: false,
-        error: 'reCAPTCHA verification failed. Please try again.'
+        error: recaptchaMessage
       });
     }
 
