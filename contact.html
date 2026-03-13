@@ -135,7 +135,21 @@
     tailwind.config = { content: ["*"] };
     const RECAPTCHA_SITE_KEY = '6Leob4YsAAAAAIQMO2g103_fjPwHuyGjkSwlytDV';
 
-    const loadRecaptchaScript = (siteKey) => {
+    const RECAPTCHA_SOURCES = [
+      'https://www.google.com/recaptcha/api.js',
+      'https://www.recaptcha.net/recaptcha/api.js'
+    ];
+
+    const getRecaptchaSourceIndex = () => {
+      const value = window.sessionStorage.getItem('recaptchaSourceIndex');
+      return value ? Number(value) : 0;
+    };
+
+    const setRecaptchaSourceIndex = (index) => {
+      window.sessionStorage.setItem('recaptchaSourceIndex', String(index));
+    };
+
+    const loadRecaptchaScript = (siteKey, sourceIndex = getRecaptchaSourceIndex()) => {
       return new Promise((resolve, reject) => {
         if (typeof grecaptcha !== 'undefined' && grecaptcha.ready && grecaptcha.execute) {
           resolve();
@@ -149,16 +163,36 @@
           return;
         }
 
+        const source = RECAPTCHA_SOURCES[sourceIndex];
+        if (!source) {
+          reject(new Error('RECAPTCHA_LOAD_FAILED'));
+          return;
+        }
+
         const script = document.createElement('script');
-        script.src = 'https://www.google.com/recaptcha/api.js?render=' + encodeURIComponent(siteKey);
+        script.src = source + '?render=' + encodeURIComponent(siteKey);
         script.async = true;
         script.defer = true;
         script.dataset.recaptcha = 'true';
-        script.onload = () => resolve();
-        script.onerror = () => reject(new Error('RECAPTCHA_LOAD_FAILED'));
+        script.onload = () => {
+          setRecaptchaSourceIndex(sourceIndex);
+          resolve();
+        };
+        script.onerror = () => {
+          script.remove();
+          if (sourceIndex + 1 < RECAPTCHA_SOURCES.length) {
+            loadRecaptchaScript(siteKey, sourceIndex + 1).then(resolve).catch(reject);
+            return;
+          }
+          reject(new Error('RECAPTCHA_LOAD_FAILED'));
+        };
         document.head.appendChild(script);
       });
     };
+
+    loadRecaptchaScript(RECAPTCHA_SITE_KEY).catch(() => {
+      console.warn('reCAPTCHA preload failed; will retry on submit.');
+    });
     
     // Contact form submission with email sending
     const formContact = document.getElementById('consult-form');
@@ -191,7 +225,7 @@
                   grecaptcha
                     .execute(RECAPTCHA_SITE_KEY, { action: 'contact_form' })
                     .then(resolve)
-                    .catch(() => reject(new Error('RECAPTCHA_EXECUTE_FAILED')));
+                    .catch((executeError) => reject(new Error('RECAPTCHA_EXECUTE_FAILED:' + (executeError && executeError.message ? executeError.message : 'unknown'))));
                 });
               })
               .catch((error) => reject(error));
@@ -245,8 +279,8 @@
 
         } catch (error) {
           console.error('Form submission error:', error);
-          if (error.message === 'RECAPTCHA_LOAD_FAILED' || error.message === 'RECAPTCHA_UNAVAILABLE' || error.message === 'RECAPTCHA_EXECUTE_FAILED') {
-            alert('reCAPTCHA failed to load. Please disable ad/privacy blockers for this site and try again, or call us at (407) 803-2087.');
+          if (error.message === 'RECAPTCHA_LOAD_FAILED' || error.message === 'RECAPTCHA_UNAVAILABLE' || error.message.startsWith('RECAPTCHA_EXECUTE_FAILED')) {
+            alert('reCAPTCHA could not initialize. Please refresh and try again. If this continues, verify the domain is allowed for your reCAPTCHA key (both ortizcustomworks.com and www.ortizcustomworks.com), or call us at (407) 803-2087.');
           } else if (error.message === 'API_CONFIG_MISSING') {
             alert('API configuration is missing on this page. Please refresh and try again, or call us at (407) 803-2087.');
           } else if (error.message.startsWith('API_HTTP_400:')) {
