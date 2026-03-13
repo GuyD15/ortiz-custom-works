@@ -234,15 +234,45 @@ const emailTransporter = nodemailer.createTransport({
   }
 });
 
+let emailServiceReady = false;
+let emailServiceLastError = null;
+
 // Test email connection on startup
 emailTransporter.verify((error, success) => {
   if (error) {
+    emailServiceReady = false;
+    emailServiceLastError = error.message;
     console.log('⚠️  Email Service Not Configured:', error.message);
     console.log('   Contact form emails will NOT be sent until configured.');
   } else {
+    emailServiceReady = true;
+    emailServiceLastError = null;
     console.log('✅ Email Service Ready');
   }
 });
+
+async function sendMailStrict(mailOptions, contextLabel) {
+  const info = await emailTransporter.sendMail(mailOptions);
+  const accepted = Array.isArray(info.accepted) ? info.accepted : [];
+  const rejected = Array.isArray(info.rejected) ? info.rejected : [];
+
+  logger.info('Email send attempt', {
+    context: contextLabel,
+    messageId: info.messageId,
+    accepted,
+    rejected,
+    response: info.response
+  });
+
+  if (rejected.length > 0 || accepted.length === 0) {
+    const deliveryError = new Error(`Email delivery not accepted (${contextLabel})`);
+    deliveryError.code = 'EMAIL_DELIVERY_REJECTED';
+    deliveryError.details = { accepted, rejected, response: info.response };
+    throw deliveryError;
+  }
+
+  return info;
+}
 
 // ============================================================
 // RECAPTCHA VERIFICATION HELPER
@@ -328,20 +358,21 @@ app.post('/api/contact-form', async (req, res) => {
     `;
 
     // Send email to business owner
-    await emailTransporter.sendMail({
+    await sendMailStrict({
       from: process.env.EMAIL_USER || 'noreply@ortizcustomworks.com',
       to: process.env.OWNER_EMAIL || 'ortizcustomworks@gmail.com',
       subject: `New Consultation Request from ${name}`,
-      html: ownerEmailContent
-    });
+      html: ownerEmailContent,
+      replyTo: email
+    }, 'contact-owner-notification');
 
     // Send confirmation email to customer
-    await emailTransporter.sendMail({
+    await sendMailStrict({
       from: process.env.EMAIL_USER || 'noreply@ortizcustomworks.com',
       to: email,
       subject: 'Consultation Request Received - Ortiz Custom Works',
       html: customerEmailContent
-    });
+    }, 'contact-customer-confirmation');
 
     // Log for records
     logger.info('Contact form submitted', {
@@ -361,7 +392,8 @@ app.post('/api/contact-form', async (req, res) => {
       error: error.message,
       stack: error.stack,
       name: req.body.name,
-      email: req.body.email
+      email: req.body.email,
+      details: error.details || null
     });
     res.status(500).json({
       success: false,
@@ -1044,7 +1076,11 @@ app.get('/api/health', (req, res) => {
     status: 'OK',
     timestamp: new Date().toISOString(),
     services: {
-      email: process.env.EMAIL_USER ? 'configured' : 'not configured',
+      email: {
+        configured: !!process.env.EMAIL_USER,
+        ready: emailServiceReady,
+        lastError: emailServiceLastError
+      },
       quickbooks: (qbTokenCache.accessToken || process.env.QB_ACCESS_TOKEN_ENCRYPTED) ? 'configured' : 'not configured'
     }
   });
