@@ -4,7 +4,7 @@
 
   var defaultApiBase = isLocal
     ? 'http://localhost:5000'
-    : 'https://api.ortizcustomworks.com';
+    : 'https://ortiz-custom-works.onrender.com';
 
   var overrideApiBase = null;
   try {
