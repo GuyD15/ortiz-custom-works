@@ -208,19 +208,19 @@
       <form id="consult-form" class="space-y-5 bg-white p-6 sm:p-8 rounded-3xl shadow-lg max-w-2xl mx-auto">
         <div class="text-left">
           <label class="block text-sm font-semibold text-zinc-700 mb-2">Full Name *</label>
-          <input type="text" placeholder="Enter your full name" class="w-full px-4 sm:px-6 py-3 sm:py-4 border-2 border-zinc-300 rounded-2xl focus:border-[var(--primary)] focus:outline-none transition bg-white text-zinc-800" required>
+          <input type="text" id="contact-name" placeholder="Enter your full name" class="w-full px-4 sm:px-6 py-3 sm:py-4 border-2 border-zinc-300 rounded-2xl focus:border-[var(--primary)] focus:outline-none transition bg-white text-zinc-800" required>
         </div>
         <div class="text-left">
           <label class="block text-sm font-semibold text-zinc-700 mb-2">Phone Number *</label>
-          <input type="tel" placeholder="(407) 803-2087" class="w-full px-4 sm:px-6 py-3 sm:py-4 border-2 border-zinc-300 rounded-2xl focus:border-[var(--primary)] focus:outline-none transition bg-white text-zinc-800" required>
+          <input type="tel" id="contact-phone" placeholder="(407) 803-2087" class="w-full px-4 sm:px-6 py-3 sm:py-4 border-2 border-zinc-300 rounded-2xl focus:border-[var(--primary)] focus:outline-none transition bg-white text-zinc-800" required>
         </div>
         <div class="text-left">
           <label class="block text-sm font-semibold text-zinc-700 mb-2">Email *</label>
-          <input type="email" placeholder="your.email@example.com" class="w-full px-4 sm:px-6 py-3 sm:py-4 border-2 border-zinc-300 rounded-2xl focus:border-[var(--primary)] focus:outline-none transition bg-white text-zinc-800" required>
+          <input type="email" id="contact-email" placeholder="your.email@example.com" class="w-full px-4 sm:px-6 py-3 sm:py-4 border-2 border-zinc-300 rounded-2xl focus:border-[var(--primary)] focus:outline-none transition bg-white text-zinc-800" required>
         </div>
         <div class="text-left">
           <label class="block text-sm font-semibold text-zinc-700 mb-2">Project Details</label>
-          <textarea placeholder="Describe your project, room size, style preferences, etc." rows="5" class="w-full px-4 sm:px-6 py-3 sm:py-4 border-2 border-zinc-300 rounded-2xl focus:border-[var(--primary)] focus:outline-none transition bg-white text-zinc-800"></textarea>
+          <textarea id="contact-details" placeholder="Describe your project, room size, style preferences, etc." rows="5" class="w-full px-4 sm:px-6 py-3 sm:py-4 border-2 border-zinc-300 rounded-2xl focus:border-[var(--primary)] focus:outline-none transition bg-white text-zinc-800"></textarea>
         </div>
         <button type="submit" class="w-full bg-[var(--primary)] text-white py-4 sm:py-6 text-base sm:text-lg font-bold rounded-3xl hover:bg-orange-700 transition">Send Message</button>
       </form>
@@ -238,15 +238,173 @@
     </div>
   </footer>
 
+  <script src="api-config.js"></script>
   <script>
     tailwind.config = { content: ["*"] };
-    const form = document.getElementById('consult-form');
-    if (form) {
-      form.addEventListener('submit', e => {
+    const RECAPTCHA_SITE_KEY = '6Leob4YsAAAAAIQMO2g103_fjPwHuyGjkSwlytDV';
+
+    const RECAPTCHA_SOURCES = [
+      'https://www.google.com/recaptcha/api.js',
+      'https://www.recaptcha.net/recaptcha/api.js'
+    ];
+
+    const getRecaptchaSourceIndex = () => {
+      const value = window.sessionStorage.getItem('recaptchaSourceIndex');
+      return value ? Number(value) : 0;
+    };
+
+    const setRecaptchaSourceIndex = (index) => {
+      window.sessionStorage.setItem('recaptchaSourceIndex', String(index));
+    };
+
+    const loadRecaptchaScript = (siteKey, sourceIndex = getRecaptchaSourceIndex()) => {
+      return new Promise((resolve, reject) => {
+        if (typeof grecaptcha !== 'undefined' && grecaptcha.ready && grecaptcha.execute) {
+          resolve();
+          return;
+        }
+
+        const existingScript = document.querySelector('script[data-recaptcha="true"]');
+        if (existingScript) {
+          existingScript.addEventListener('load', () => resolve(), { once: true });
+          existingScript.addEventListener('error', () => reject(new Error('RECAPTCHA_LOAD_FAILED')), { once: true });
+          return;
+        }
+
+        const source = RECAPTCHA_SOURCES[sourceIndex];
+        if (!source) {
+          reject(new Error('RECAPTCHA_LOAD_FAILED'));
+          return;
+        }
+
+        const script = document.createElement('script');
+        script.src = source + '?render=' + encodeURIComponent(siteKey);
+        script.async = true;
+        script.defer = true;
+        script.dataset.recaptcha = 'true';
+        script.onload = () => {
+          setRecaptchaSourceIndex(sourceIndex);
+          resolve();
+        };
+        script.onerror = () => {
+          script.remove();
+          if (sourceIndex + 1 < RECAPTCHA_SOURCES.length) {
+            loadRecaptchaScript(siteKey, sourceIndex + 1).then(resolve).catch(reject);
+            return;
+          }
+          reject(new Error('RECAPTCHA_LOAD_FAILED'));
+        };
+        document.head.appendChild(script);
+      });
+    };
+
+    loadRecaptchaScript(RECAPTCHA_SITE_KEY).catch(() => {
+      console.warn('reCAPTCHA preload failed; will retry on submit.');
+    });
+
+    // Contact form submission with email sending
+    const formContact = document.getElementById('consult-form');
+    if (formContact) {
+      formContact.addEventListener('submit', async (e) => {
         e.preventDefault();
-        alert('Thank you! We will call you within 24 hours to schedule your FREE consultation.');
+
+        // Get form data
+        const name = document.getElementById('contact-name').value;
+        const phone = document.getElementById('contact-phone').value;
+        const email = document.getElementById('contact-email').value;
+        const projectDetails = document.getElementById('contact-details').value;
+
+        // Show loading state
+        const submitBtn = formContact.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Sending...';
+        submitBtn.disabled = true;
+
+        const getRecaptchaToken = () => {
+          return new Promise((resolve, reject) => {
+            loadRecaptchaScript(RECAPTCHA_SITE_KEY)
+              .then(() => {
+                if (typeof grecaptcha === 'undefined' || !grecaptcha.ready || !grecaptcha.execute) {
+                  reject(new Error('RECAPTCHA_UNAVAILABLE'));
+                  return;
+                }
+
+                grecaptcha.ready(() => {
+                  grecaptcha
+                    .execute(RECAPTCHA_SITE_KEY, { action: 'contact_form' })
+                    .then(resolve)
+                    .catch((executeError) => reject(new Error('RECAPTCHA_EXECUTE_FAILED:' + (executeError && executeError.message ? executeError.message : 'unknown'))));
+                });
+              })
+              .catch((error) => reject(error));
+          });
+        };
+
+        try {
+          // Generate reCAPTCHA token
+          const recaptchaToken = await getRecaptchaToken();
+
+          const endpoint = typeof apiUrl === 'function' ? apiUrl('/api/contact-form') : null;
+          if (!endpoint) {
+            throw new Error('API_CONFIG_MISSING');
+          }
+
+          // Send to backend API
+          const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              name: name,
+              phone: phone,
+              email: email,
+              projectDetails: projectDetails,
+              recaptchaToken: recaptchaToken
+            })
+          });
+
+          let result = null;
+          try {
+            result = await response.json();
+          } catch (parseError) {
+            result = null;
+          }
+
+          if (!response.ok) {
+            const apiError = result && result.error ? result.error : ('HTTP ' + response.status);
+            throw new Error('API_HTTP_' + response.status + ':' + apiError);
+          }
+
+          if (result.success) {
+            alert('Thank you! We will call you within 24 hours to schedule your FREE consultation.\n\nYou should also receive a confirmation email shortly.');
+            formContact.reset();
+            // Scroll to top to show success message
+            window.scrollTo(0, 0);
+          } else {
+            alert('Error sending message: ' + result.error + '\n\nPlease try calling us instead: (407) 803-2087');
+          }
+
+        } catch (error) {
+          console.error('Form submission error:', error);
+          if (error.message === 'RECAPTCHA_LOAD_FAILED' || error.message === 'RECAPTCHA_UNAVAILABLE' || error.message.startsWith('RECAPTCHA_EXECUTE_FAILED')) {
+            alert('reCAPTCHA could not initialize. Please refresh and try again. If this continues, verify the domain is allowed for your reCAPTCHA key (both ortizcustomworks.com and www.ortizcustomworks.com), or call us at (407) 803-2087.');
+          } else if (error.message === 'API_CONFIG_MISSING') {
+            alert('API configuration is missing on this page. Please refresh and try again, or call us at (407) 803-2087.');
+          } else if (error.message.startsWith('API_HTTP_400:')) {
+            const apiMessage = error.message.replace('API_HTTP_400:', '');
+            alert('Unable to send message: ' + apiMessage + '\n\nIf this mentions reCAPTCHA, please refresh the page and try again. You can also call us at (407) 803-2087.');
+          } else {
+            alert('Unable to send message right now. Please try again, or call us at (407) 803-2087.');
+          }
+        } finally {
+          submitBtn.textContent = originalText;
+          submitBtn.disabled = false;
+        }
       });
     }
+
+    // Mobile menu toggle
     const menuBtn = document.getElementById('mobile-menu-button');
     const mobileMenu = document.getElementById('mobile-menu');
     if (menuBtn && mobileMenu) {
@@ -256,7 +414,6 @@
     }
   </script>
   <!-- Chatbot Widget -->
-  <script src="api-config.js"></script>
   <script src="chatbot.js"></script>
 </body>
 </html>
